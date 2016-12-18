@@ -7,7 +7,6 @@
 
 ;;; project tree
 (require 'neotree)
-(neotree-toggle)
 (setq neo-theme 'ascii)
 (setq projectile-switch-project-action 'neotree-projectile-action)
 ;(setq projectile-find-file-hook 'neotree-projectile-action)
@@ -40,6 +39,9 @@
       (message "Could not find git project root."))))
 
 (global-set-key [f8] 'neotree-project-dir)
+(neotree-toggle)
+;;; TODO add function that finds current file in neotree and goes back to buffer.
+;;; run it on initial toggle and after projectile find file
 
 ;;; move selection with M
 (drag-stuff-global-mode 1)
@@ -145,3 +147,20 @@ version 2016-06-18"
 
 (fringe-mode '(10 . 0))
 (setq-default line-spacing 2)
+
+;;; indent/unindent with tab
+;;; TODO add smarts to include half selected lines
+(defun my-indent ()
+  (interactive)
+  (save-mark-and-excursion
+   (indent-code-rigidly (region-beginning) (region-end) 2))
+   (setq deactivate-mark nil))
+
+(defun my-unindent ()
+  (interactive)
+  (save-mark-and-excursion
+   (indent-code-rigidly (region-beginning) (region-end) -2))
+   (setq deactivate-mark nil))
+
+(global-set-key (kbd "<tab>") 'my-indent)
+(global-set-key (kbd "<backtab>") 'my-unindent)
