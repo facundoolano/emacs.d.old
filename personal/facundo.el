@@ -183,7 +183,7 @@ version 2016-06-18"
 (eval-after-load 'js-mode
   '(add-hook 'js-mode-hook #'add-node-modules-path))
 
-(eval-after-load 'js2-mo
+(eval-after-load 'js2-mode
   '(add-hook 'js2-mode-hook #'add-node-modules-path))
 
 (setq js2-basic-offset 2)
@@ -195,3 +195,11 @@ version 2016-06-18"
 (global-set-key (kbd "M-n p") 'npm-publish)
 (global-set-key (kbd "M-n t") 'npm-test)
 (global-set-key (kbd "M-n v") 'npm-version)
+
+
+(defun new-empty-buffer ()
+  "Open a new empty buffer"
+  (interactive)
+  (let ((buf (generate-new-buffer "untitled")))
+    (switch-to-buffer buf)
+    (funcall (and initial-major-mode))))
