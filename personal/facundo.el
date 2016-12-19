@@ -39,7 +39,7 @@
       (message "Could not find git project root."))))
 
 (global-set-key [f8] 'neotree-project-dir)
-(neotree-toggle)
+;; (neotree-toggle)
 ;;; TODO add function that finds current file in neotree and goes back to buffer.
 ;;; run it on initial toggle and after projectile find file
 
@@ -55,6 +55,9 @@
 
 ;;; remember window size
 (desktop-save-mode 1)
+
+;;; disable line wrapping
+(set-default 'truncate-lines t)
 
 ;;; helm stuff
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
@@ -150,11 +153,22 @@ version 2016-06-18"
 
 ;;; indent/unindent with tab
 ;;; TODO add smarts to include half selected lines
+;;; FIXME should not indent a region if not selected, just the current line
+;;; FIXME should fire completion if in the middle of line and no region selected
+;;; https://ignaciopp.wordpress.com/2009/06/17/emacs-indentunindent-region-as-a-block-using-the-tab-key/
+
 (defun my-indent ()
+  "If mark is active indent code block, otherwise call company indet or complete."
   (interactive)
-  (save-mark-and-excursion
-   (indent-code-rigidly (region-beginning) (region-end) 2))
-   (setq deactivate-mark nil))
+  (if mark-active
+    (save-mark-and-excursion
+     (indent-code-rigidly (region-beginning) (region-end) 2)
+     (setq deactivate-mark nil))
+    (if (looking-at "\\_>")
+      (company-complete-common)
+      (indent-according-to-mode))
+    )
+  )
 
 (defun my-unindent ()
   (interactive)
@@ -162,5 +176,22 @@ version 2016-06-18"
    (indent-code-rigidly (region-beginning) (region-end) -2))
    (setq deactivate-mark nil))
 
-(global-set-key (kbd "<tab>") 'my-indent)
-(global-set-key (kbd "<backtab>") 'my-unindent)
+(define-key prog-mode-map (kbd "<tab>") 'my-indent)
+(define-key prog-mode-map (kbd "<backtab>") 'my-unindent)
+
+;;; js customizations
+(eval-after-load 'js-mode
+  '(add-hook 'js-mode-hook #'add-node-modules-path))
+
+(eval-after-load 'js2-mo
+  '(add-hook 'js2-mode-hook #'add-node-modules-path))
+
+(setq js2-basic-offset 2)
+
+(global-set-key (kbd "M-n i") 'npm-install)
+;; (global-set-key (kbd "M-n n") 'npm-new)
+(global-set-key (kbd "M-n d") 'npm-new-dependency)
+;; (global-set-key (kbd "M-n e") 'npm-nodemon-exec)
+(global-set-key (kbd "M-n p") 'npm-publish)
+(global-set-key (kbd "M-n t") 'npm-test)
+(global-set-key (kbd "M-n v") 'npm-version)
