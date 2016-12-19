@@ -64,7 +64,6 @@
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
 (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
-
 ;;; toggle comments
 
 (defun comment-or-uncomment-region-or-line ()
@@ -165,7 +164,7 @@ version 2016-06-18"
      (indent-code-rigidly (region-beginning) (region-end) 2)
      (setq deactivate-mark nil))
     (if (looking-at "\\_>")
-      (company-complete-common)
+      (company-complete-common-or-cycle)
       (indent-according-to-mode))
     )
   )
@@ -177,6 +176,7 @@ version 2016-06-18"
    (setq deactivate-mark nil))
 
 (define-key prog-mode-map (kbd "<tab>") 'my-indent)
+(define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
 (define-key prog-mode-map (kbd "<backtab>") 'my-unindent)
 
 ;;; js customizations
