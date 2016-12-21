@@ -1,7 +1,7 @@
 ;;; facundo customizations
 
 ;;; list of required packages
-(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree))
+(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path))
 
 ;;; sublime like color theme
 (disable-theme 'zenburn)
