@@ -88,6 +88,11 @@
 (define-key prelude-mode-map (kbd "M-o") 'crux-smart-open-line-above)
 (define-key prelude-mode-map (kbd "s-o") 'projectile-switch-project)
 
+(setq projectile-globally-ignored-directories (append '("node_modules") projectile-globally-ignored-directories))
+
+;;; open project in new frame
+(nameframe-projectile-mode t)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;;; navigate buffers
 (defun xah-next-user-buffer ()
@@ -215,3 +220,7 @@ version 2016-06-18"
     (isearch-repeat (if isearch-forward 'forward))
     (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
     (ad-activate 'isearch-search)))
+
+
+;;; list of installed packages, just copying it here until i find a way of keeping track
+;;; ((drag-stuff easy-kill monokai-theme nameframe-projectile neotree))
