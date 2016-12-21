@@ -1,5 +1,8 @@
 ;;; facundo customizations
 
+;;; list of required packages
+(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree))
+
 ;;; sublime like color theme
 (disable-theme 'zenburn)
 (load-theme 'monokai t)
@@ -220,7 +223,3 @@ version 2016-06-18"
     (isearch-repeat (if isearch-forward 'forward))
     (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
     (ad-activate 'isearch-search)))
-
-
-;;; list of installed packages, just copying it here until i find a way of keeping track
-;;; ((drag-stuff easy-kill monokai-theme nameframe-projectile neotree))
