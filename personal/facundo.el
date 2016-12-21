@@ -1,7 +1,7 @@
 ;;; facundo customizations
 
 ;;; list of required packages
-(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo))
+(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo js2-highlight-vars))
 
 ;;; sublime like color theme
 (disable-theme 'zenburn)
@@ -11,8 +11,7 @@
 ;;; project tree
 (require 'neotree)
 (setq neo-theme 'ascii)
-(setq projectile-switch-project-action 'neotree-projectile-action)
-;(setq projectile-find-file-hook 'neotree-projectile-action)
+;(setq projectile-switch-project-action 'neotree-projectile-action)
 
 ; yanked from spacemacs
 (setq neo-window-width 32
@@ -21,30 +20,50 @@
       neo-show-updir-line nil
       neo-mode-line-type 'neotree
       neo-smart-open t
-      neo-dont-be-alone t
-      neo-persist-show nil
       neo-show-hidden-files t
       neo-auto-indent-point t
-      neo-modern-sidebar t
       neo-vc-integration nil)
 
-(defun neotree-project-dir ()
+(setq neo-toggle-window-keep-p t)
+
+;; FIXME reduce duplication
+(defun neotree-project-sync ()
   "Open NeoTree using the git root."
   (interactive)
   (let ((project-dir (projectile-project-root))
-        (file-name (buffer-file-name)))
+        (file-name (buffer-file-name))
+        (cw (selected-window)))
+    (neotree-show)
+    (if project-dir
+        (if (neo-global--window-exists-p)
+            (progn
+              (neotree-dir project-dir)
+              (neotree-find file-name)))
+      (message "Could not find git project root."))
+    (select-window cw)))
+
+(defun neotree-project-toggle ()
+  "Open NeoTree using the git root."
+  (interactive)
+  (let ((project-dir (projectile-project-root))
+        (file-name (buffer-file-name))
+        (cw (selected-window)))
     (neotree-toggle)
     (if project-dir
         (if (neo-global--window-exists-p)
             (progn
               (neotree-dir project-dir)
               (neotree-find file-name)))
-      (message "Could not find git project root."))))
+      (message "Could not find git project root."))
+    (select-window cw)))
 
-(global-set-key [f8] 'neotree-project-dir)
-;; (neotree-toggle)
-;;; TODO add function that finds current file in neotree and goes back to buffer.
-;;; run it on initial toggle and after projectile find file
+;; sync neotree when finding file with projectile
+(add-hook 'projectile-find-file-hook 'neotree-project-sync)
+(add-hook 'projectile-grep-finished-hook 'neotree-project-sync)
+
+(global-set-key [f8] 'neotree-project-toggle)
+;; (neotree-project-toggle)
+(add-hook 'after-init-hook #'neotree-project-toggle)
 
 ;;; move selection with M
 (drag-stuff-global-mode 1)
@@ -164,12 +183,14 @@ version 2016-06-18"
 ;;; FIXME should fire completion if in the middle of line and no region selected
 ;;; https://ignaciopp.wordpress.com/2009/06/17/emacs-indentunindent-region-as-a-block-using-the-tab-key/
 
+(defvar my-indentation-offset 2 "My indentation offset. ")
+
 (defun my-indent ()
   "If mark is active indent code block, otherwise call company indet or complete."
   (interactive)
   (if mark-active
     (save-mark-and-excursion
-     (indent-code-rigidly (region-beginning) (region-end) 2)
+     (indent-code-rigidly (region-beginning) (region-end) my-indentation-offset)
      (setq deactivate-mark nil))
     (if (looking-at "\\_>")
       (company-complete-common-or-cycle)
@@ -180,7 +201,7 @@ version 2016-06-18"
 (defun my-unindent ()
   (interactive)
   (save-mark-and-excursion
-   (indent-code-rigidly (region-beginning) (region-end) -2))
+   (indent-code-rigidly (region-beginning) (region-end) (- my-indentation-offset)))
    (setq deactivate-mark nil))
 
 (define-key prog-mode-map (kbd "<tab>") 'my-indent)
@@ -189,6 +210,27 @@ version 2016-06-18"
 (define-key prog-mode-map (kbd "<backtab>") 'my-unindent)
 (define-key js2-mode-map (kbd "<backtab>") 'my-unindent)
 
+(defun backspace-whitespace-to-tab-stop ()
+  "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
+  (interactive)
+  (if (or indent-tabs-mode
+          (region-active-p)
+          (save-excursion
+            (> (point) (progn (back-to-indentation)
+                              (point)))))
+      (call-interactively 'backward-delete-char-untabify)
+    (let ((movement (% (current-column) my-indentation-offset))
+          (p (point)))
+      (when (= movement 0) (setq movement my-indentation-offset))
+      ;; Account for edge case near beginning of buffer
+      (setq movement (min (- p 1) movement))
+      (save-match-data
+        (if (string-match "[^\t ]*\\([\t ]+\\)$" (buffer-substring-no-properties (- p movement) p))
+            (backward-delete-char (- (match-end 1) (match-beginning 1)))
+          (call-interactively 'backward-delete-char))))))
+
+(define-key js2-mode-map [(backspace)] 'backspace-whitespace-to-tab-stop)
+
 ;;; js customizations
 (eval-after-load 'js-mode
   '(add-hook 'js-mode-hook #'add-node-modules-path))
@@ -196,7 +238,7 @@ version 2016-06-18"
 (eval-after-load 'js2-mode
   '(add-hook 'js2-mode-hook #'add-node-modules-path))
 
-(setq js2-basic-offset 2)
+(setq js2-basic-offset my-indentation-offset)
 
 (global-set-key (kbd "M-n i") 'npm-install)
 ;; (global-set-key (kbd "M-n n") 'npm-new)
