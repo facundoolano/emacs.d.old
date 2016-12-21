@@ -176,8 +176,10 @@ version 2016-06-18"
    (setq deactivate-mark nil))
 
 (define-key prog-mode-map (kbd "<tab>") 'my-indent)
+(define-key js2-mode-map (kbd "<tab>") 'my-indent)
 (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
 (define-key prog-mode-map (kbd "<backtab>") 'my-unindent)
+(define-key js2-mode-map (kbd "<backtab>") 'my-unindent)
 
 ;;; js customizations
 (eval-after-load 'js-mode
@@ -203,3 +205,13 @@ version 2016-06-18"
   (let ((buf (generate-new-buffer "untitled")))
     (switch-to-buffer buf)
     (funcall (and initial-major-mode))))
+
+
+;;; wrap search by default
+(defadvice isearch-search (after isearch-no-fail activate)
+  (unless isearch-success
+    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)
+    (isearch-repeat (if isearch-forward 'forward))
+    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)))
