@@ -57,6 +57,7 @@
       (message "Could not find git project root."))
     (select-window cw)))
 
+(setq neo-confirm-change-root "Off")
 ;; sync neotree when finding file with projectile
 (add-hook 'projectile-find-file-hook 'neotree-project-sync)
 (add-hook 'projectile-grep-finished-hook 'neotree-project-sync)
@@ -129,7 +130,8 @@ Version 2016-06-19"
       (if (not (xah-user-buffer-q))
           (progn (next-buffer)
                  (setq i (1+ i)))
-        (progn (setq i 100))))))
+        (progn (setq i 100))))
+    (neotree-project-sync)))
 
 (defun xah-previous-user-buffer ()
   "Switch to the previous user buffer.
@@ -143,7 +145,8 @@ Version 2016-06-19"
       (if (not (xah-user-buffer-q))
           (progn (previous-buffer)
                  (setq i (1+ i)))
-        (progn (setq i 100))))))
+        (progn (setq i 100))))
+    (neotree-project-sync)))
 
 (defun xah-user-buffer-q ()
   "Return t if current buffer is a user buffer, else nil.
@@ -248,14 +251,12 @@ version 2016-06-18"
 (global-set-key (kbd "M-n t") 'npm-test)
 (global-set-key (kbd "M-n v") 'npm-version)
 
-
 (defun new-empty-buffer ()
   "Open a new empty buffer."
   (interactive)
   (let ((buf (generate-new-buffer "untitled")))
     (switch-to-buffer buf)
     (funcall (and initial-major-mode))))
-
 
 ;;; wrap search by default
 (defadvice isearch-search (after isearch-no-fail activate)
@@ -266,4 +267,5 @@ version 2016-06-18"
     (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
     (ad-activate 'isearch-search)))
 
+;; highlights todo and fixme
 (global-hl-todo-mode t)
