@@ -1,7 +1,7 @@
 ;;; facundo customizations
 
 ;;; list of required packages
-(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path))
+(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo))
 
 ;;; sublime like color theme
 (disable-theme 'zenburn)
@@ -208,7 +208,7 @@ version 2016-06-18"
 
 
 (defun new-empty-buffer ()
-  "Open a new empty buffer"
+  "Open a new empty buffer."
   (interactive)
   (let ((buf (generate-new-buffer "untitled")))
     (switch-to-buffer buf)
@@ -223,3 +223,5 @@ version 2016-06-18"
     (isearch-repeat (if isearch-forward 'forward))
     (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
     (ad-activate 'isearch-search)))
+
+(global-hl-todo-mode t)
