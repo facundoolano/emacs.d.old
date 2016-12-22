@@ -1,7 +1,7 @@
 ;;; facundo customizations
 
 ;;; list of required packages
-(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo js2-highlight-vars))
+(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo js2-highlight-vars parinfer))
 
 ;;; sublime like color theme
 (disable-theme 'zenburn)
@@ -119,35 +119,37 @@
 
 ;;; navigate buffers
 (defun xah-next-user-buffer ()
-  "Switch to the next user buffer.
+  "Switch to the next user buffer within the current project.
 “user buffer” is determined by `xah-user-buffer-q'.
 URL `http://ergoemacs.org/emacs/elisp_next_prev_user_buffer.html'
 Version 2016-06-19"
   (interactive)
-  (next-buffer)
-  (let ((i 0))
-    (while (< i 20)
-      (if (not (xah-user-buffer-q))
-          (progn (next-buffer)
-                 (setq i (1+ i)))
-        (progn (setq i 100))))
-    (neotree-project-sync)))
+  (let ((root (projectile-project-root)))
+    (next-buffer)
+    (let ((i 0))
+      (while (< i 20)
+        (if (or (not (xah-user-buffer-q)) (not (projectile-project-buffer-p (current-buffer) root)))
+            (progn (next-buffer)
+                   (setq i (1+ i)))
+          (progn (setq i 100))))
+      (neotree-project-sync))))
 
 (defun xah-previous-user-buffer ()
-  "Switch to the previous user buffer.
+  "Switch to the previous user buffer within the current project.
 “user buffer” is determined by `xah-user-buffer-q'.
 URL `http://ergoemacs.org/emacs/elisp_next_prev_user_buffer.html'
 Version 2016-06-19"
   (interactive)
-  (previous-buffer)
-  (let ((i 0))
-    (while (< i 20)
-      (if (not (xah-user-buffer-q))
+  (let ((root (projectile-project-root)))
+    (previous-buffer)
+    (let ((i 0))
+      (while (< i 20)
+        (if (or (not (xah-user-buffer-q)) (not (projectile-project-buffer-p (current-buffer) root)))
           (progn (previous-buffer)
                  (setq i (1+ i)))
-        (progn (setq i 100))))
-    (neotree-project-sync)))
-
+          (progn (setq i 100))))
+      (neotree-project-sync))))
+ ;;
 (defun xah-user-buffer-q ()
   "Return t if current buffer is a user buffer, else nil.
 Typically, if buffer name starts with *, it's not considered a user buffer.
@@ -159,8 +161,8 @@ version 2016-06-18"
       nil
     (if (string-equal major-mode "dired-mode")
         nil
-      t
-      )))
+      t)))
+
 
 
 (global-set-key (kbd "C-<tab>") 'xah-next-user-buffer)
@@ -197,15 +199,15 @@ version 2016-06-18"
      (setq deactivate-mark nil))
     (if (looking-at "\\_>")
       (company-complete-common-or-cycle)
-      (indent-according-to-mode))
-    )
-  )
+      (indent-according-to-mode))))
+
+
 
 (defun my-unindent ()
   (interactive)
   (save-mark-and-excursion
-   (indent-code-rigidly (region-beginning) (region-end) (- my-indentation-offset)))
-   (setq deactivate-mark nil))
+   (indent-code-rigidly (region-beginning) (region-end) (- my-indentation-offset))
+   (setq deactivate-mark nil)))
 
 (define-key prog-mode-map (kbd "<tab>") 'my-indent)
 (define-key js2-mode-map (kbd "<tab>") 'my-indent)
