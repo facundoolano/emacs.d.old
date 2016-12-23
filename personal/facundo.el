@@ -171,8 +171,6 @@ version 2016-06-18"
         nil
       t)))
 
-
-
 (global-set-key (kbd "C-<tab>") 'xah-next-user-buffer)
 (global-set-key (kbd "C-S-<tab>") 'xah-previous-user-buffer)
 
@@ -208,8 +206,6 @@ version 2016-06-18"
     (if (looking-at "\\_>")
       (company-complete-common-or-cycle)
       (indent-according-to-mode))))
-
-
 
 (defun my-unindent ()
   (interactive)
@@ -253,6 +249,7 @@ version 2016-06-18"
 
 (setq js2-basic-offset my-indentation-offset)
 
+;;; FIXME this should go in js2 mode only
 (global-set-key (kbd "M-n i") 'npm-install)
 ;; (global-set-key (kbd "M-n n") 'npm-new)
 (global-set-key (kbd "M-n d") 'npm-new-dependency)
@@ -268,6 +265,8 @@ version 2016-06-18"
     (switch-to-buffer buf)
     (funcall (and initial-major-mode))))
 
+(global-set-key (kbd "s-n") 'new-empty-buffer)
+
 ;;; wrap search by default
 (defadvice isearch-search (after isearch-no-fail activate)
   (unless isearch-success
@@ -282,7 +281,9 @@ version 2016-06-18"
 
 ;;; parinfer config
 (defun disable-smartparens ()
-  (smartparens-mode 0))
+  (turn-off-smartparens-mode)
+  (smartparens-global-mode -1)
+  (smartparens-mo -1))
 
 (add-hook 'clojure-mode-hook 'disable-smartparens)
 (add-hook 'emacs-lisp-mode-hook 'disable-smartparens)
