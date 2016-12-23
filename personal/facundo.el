@@ -64,7 +64,7 @@
 
 (global-set-key [f8] 'neotree-project-toggle)
 ;; (neotree-project-toggle)
-(add-hook 'after-init-hook #'neotree-project-toggle)
+(add-hook 'after-init-hook #'neotree-project-sync) ;;; is this working?
 
 ;;; move selection with M
 (drag-stuff-global-mode 1)
@@ -106,6 +106,14 @@
 (global-set-key (kbd "s-p") 'helm-projectile-find-file)
 (global-set-key (kbd "s-P") 'helm-M-x)
 (global-set-key (kbd "s-F") 'helm-projectile-grep)
+
+(defun my-replace-string ()
+  (interactive)
+  (save-excursion
+    (beginning-of-buffer)
+    (call-interactively 'replace-string)))
+
+(global-set-key (kbd "M-s-ƒ") 'my-replace-string)
 
 (define-key prelude-mode-map (kbd "C-o") 'crux-smart-open-line)
 (define-key prelude-mode-map (kbd "M-o") 'crux-smart-open-line-above)
@@ -271,3 +279,16 @@ version 2016-06-18"
 
 ;; highlights todo and fixme
 (global-hl-todo-mode t)
+
+;;; parinfer config
+(defun disable-smartparens ()
+  (smartparens-mode 0))
+
+(add-hook 'clojure-mode-hook 'disable-smartparens)
+(add-hook 'emacs-lisp-mode-hook 'disable-smartparens)
+(add-hook 'clojure-mode-hook #'parinfer-mode)
+(add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+(global-set-key (kbd "s-(") 'parinfer-toggle-mode)
+
+;; (setq magit-diff-auto-show nil)
+;; (add-hook 'git-commit-mode-hook (lambda () (save-selected-window (magit-process))))
