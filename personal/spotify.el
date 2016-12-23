@@ -73,9 +73,9 @@
     (spotify-play-href (alist-get '(uri) first-track))))
 
 
-(defun spotify-search (search-term)
+(defun spotify-search (search-term type)
   "Search spotify for SEARCH-TERM, returning the results as a Lisp structure."
-  (let ((a-url (format "https://api.spotify.com/v1/search?q=%s&type=track" search-term)))
+  (let ((a-url (format "https://api.spotify.com/v1/search?q=%s&type=%s" search-term type)))
     (with-current-buffer
 	(url-retrieve-synchronously a-url)
       (goto-char url-http-end-of-headers)
@@ -95,10 +95,14 @@
 	    (mapconcat 'identity artist-names "/")
 	    album-name)))
 
-(defun spotify-search-formatted (search-term)
-  (mapcar (lambda (track)
-	    (cons (spotify-format-track track) track))
-	  (alist-get '(tracks items) (spotify-search search-term))))
+(defun spotify-search-track-formatted (search-term)
+  (mapcar (lambda (track))
+      (cons (spotify-format-track track) track)
+    (alist-get '(tracks items) (spotify-search search-term "track"))))
+
+(defun spotify-search-album-formatted (search-term)
+  (elt
+    (alist-get '(albums items) (spotify-search search-term "album")) 0))
 
 
 (defun helm-spotify-search ()
@@ -132,4 +136,8 @@
 
 (defun spotify-search-and-play-track (search-term)
   (interactive "sSong name: ")
-  (spotify-play-track (car (spotify-search-formatted search-term))))
+  (spotify-play-track (car (spotify-search-track-formatted search-term))))
+
+(defun spotify-search-and-play-album (search-term)
+  (interactive "sSong name: ")
+  (spotify-play-track (spotify-search-album-formatted search-term)))
