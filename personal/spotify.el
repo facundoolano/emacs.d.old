@@ -38,9 +38,21 @@
 
 (defmulti-method spotify-play-href 'darwin
   (href)
-  (shell-command (format "osascript -e 'tell application %S to play track %S'"
-			 "Spotify"
-			 href)))
+  (shell-command (format "osascript -e 'tell application %S to play track %S'")
+       "Spotify"
+       href))
+
+(defun spotify-stop ()
+  (interactive)
+  (shell-command (format "osascript -e 'tell application %S to pause'" "Spotify")))
+
+(defun spotify-resume ()
+  (interactive)
+  (shell-command (format "osascript -e 'tell application %S to playpause'" "Spotify")))
+
+(defun spotify-next ()
+  (interactive)
+  (shell-command (format "osascript -e 'tell application %S to next track'" "Spotify")))
 
 (defmulti-method spotify-play-href 'gnu/linux
   (href)
@@ -104,34 +116,6 @@
   (elt
     (alist-get '(albums items) (spotify-search search-term "album")) 0))
 
-
-(defun helm-spotify-search ()
-  (spotify-search-formatted helm-pattern))
-
-(defun helm-spotify-actions-for-track (actions track)
-  "Return a list of helm ACTIONS available for this TRACK."
-  `((,(format "Play Track - %s" (alist-get '(name) track))       . spotify-play-track)
-    (,(format "Play Album - %s" (alist-get '(album name) track)) . spotify-play-album)
-    ("Show Track Metadata" . pp)))
-
-;;;###autoload
-(defvar helm-source-spotify-track-search
-  '((name . "Spotify")
-    (volatile)
-    (delayed)
-    (multiline)
-    (requires-pattern . 2)
-    (candidates-process . helm-spotify-search)
-    (action-transformer . helm-spotify-actions-for-track)))
-
-;;;###autoload
-(defun helm-spotify ()
-  "Bring up a Spotify search interface in helm."
-  (interactive)
-  (helm :sources '(helm-source-spotify-track-search))
-  :buffer "*helm-spotify*")
-
-(provide 'helm-spotify)
 ;;; helm-spotify.el ends here
 
 (defun spotify-search-and-play-track (search-term)
