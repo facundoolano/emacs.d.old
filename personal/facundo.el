@@ -332,9 +332,16 @@ version 2016-06-18"
 (defun disable-smartparens ()
   (turn-off-smartparens-mode)
   (smartparens-global-mode -1)
+  (smartparens-global-strict-mode -1)
+  (smartparens-strict-mode -1)
   (smartparens-mode -1))
 
+(setq parinfer-extensions '(defaults pretty-parens smart-yank smart-tab))
+
 (add-hook 'prelude-prog-mode-hook 'disable-smartparens)
+(add-hook 'prelude-emacs-lisp-mode-hook 'disable-smartparens)
+(add-hook 'emacs-lisp-mode-hook 'disable-smartparens)
+(add-hook 'prelude-lisp-coding-hook 'disable-smartparens)
 (add-hook 'js2-mode-hook #'smartparens-mode)
 (add-hook 'clojure-mode-hook #'parinfer-mode)
 (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
