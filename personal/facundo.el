@@ -100,11 +100,28 @@
 
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region-or-line)
 
+(defun delete-line-or-region ()
+  "Deletes (without copying) the current line or the lines encompassed by the current region."
+  (interactive)
+  (let (beg end)
+    (if (region-active-p)
+      (progn
+        (setq beg (region-beginning) end (region-end))
+        (save-excursion
+          (setq beg (progn (goto-char beg) (line-beginning-position))
+                end (progn (goto-char end) (line-end-position)))))
+      (setq beg (line-beginning-position) end (line-end-position)))
+    (delete-region beg end)
+    (delete-char 1)))
+
+(global-set-key (kbd "s-d") 'delete-line-or-region)
+
 ;;; bind projectile/helm stuff to cmd key
 (define-key prelude-mode-map (kbd "s-p") nil)
 (define-key prelude-mode-map (kbd "C-c p") 'projectile-command-map)
 (global-set-key (kbd "s-p") 'helm-projectile-find-file)
 (global-set-key (kbd "s-P") 'helm-M-x)
+(global-set-key (kbd "s-w") 'delete-frame)
 (global-set-key (kbd "s-F") 'helm-projectile-grep)
 
 (defun my-replace-string ()
@@ -158,14 +175,14 @@ Version 2016-06-19"
           (progn (setq i 100))))
       (neotree-project-sync))))
  ;;
-(defun xah-user-buffer-q ()
+(defun xah-user-buffer-q (&optional buffer)
   "Return t if current buffer is a user buffer, else nil.
 Typically, if buffer name starts with *, it's not considered a user buffer.
 This function is used by buffer switching command and close buffer command, so that next buffer shown is a user buffer.
 You can override this function to get your idea of “user buffer”.
 version 2016-06-18"
   (interactive)
-  (if (string-equal "*" (substring (buffer-name) 0 1))
+  (if (string-equal "*" (substring (buffer-name buffer) 0 1))
       nil
     (if (string-equal major-mode "dired-mode")
         nil
@@ -173,7 +190,6 @@ version 2016-06-18"
 
 (global-set-key (kbd "C-<tab>") 'xah-next-user-buffer)
 (global-set-key (kbd "C-S-<tab>") 'xah-previous-user-buffer)
-
 
 ;;; show line numbers, but not on neotree
 (setq linum-format 'dynamic)
@@ -265,7 +281,40 @@ version 2016-06-18"
     (switch-to-buffer buf)
     (funcall (and initial-major-mode))))
 
+(defun new-empty-buffer-split ()
+  "Open a new empty buffer."
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1)
+  (let ((buf (generate-new-buffer "untitled")))
+    (switch-to-buffer buf)
+    (funcall (and initial-major-mode))))
+
 (global-set-key (kbd "s-n") 'new-empty-buffer)
+(global-set-key (kbd "s-N") 'new-empty-buffer-split)
+
+(defun kill-this-and-next ()
+  "Kill the current buffer and move to the next current project one if any, else find file in project. "
+  (interactive)
+  (let ((next (car (-filter 'xah-user-buffer-q (projectile-project-buffers-non-visible))))
+        (pname (projectile-project-name)))
+    (prin1 pname)
+    (kill-buffer)
+    (if next
+      (switch-to-buffer next)
+      (progn
+        (projectile-switch-project-by-name pname) ;; FIXME this is not working
+        (projectile-find-file)))))
+
+(defun kill-other-project-buffers ()
+  "Kill all user buffers from this project, except the current one."
+  (interactive)
+  (let ((project-buffers (-filter 'xah-user-buffer-q (projectile-project-buffers-non-visible))))
+    (mapcar 'kill-buffer project-buffers)))
+
+(define-key prelude-mode-map (kbd "s-k") nil)
+(global-set-key (kbd "s-k") 'kill-this-and-next)
+(global-set-key (kbd "s-K") 'kill-other-project-buffers)
 
 ;;; wrap search by default
 (defadvice isearch-search (after isearch-no-fail activate)
@@ -283,10 +332,10 @@ version 2016-06-18"
 (defun disable-smartparens ()
   (turn-off-smartparens-mode)
   (smartparens-global-mode -1)
-  (smartparens-mo -1))
+  (smartparens-mode -1))
 
-(add-hook 'clojure-mode-hook 'disable-smartparens)
-(add-hook 'emacs-lisp-mode-hook 'disable-smartparens)
+(add-hook 'prelude-prog-mode-hook 'disable-smartparens)
+(add-hook 'js2-mode-hook #'smartparens-mode)
 (add-hook 'clojure-mode-hook #'parinfer-mode)
 (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
 (global-set-key (kbd "s-(") 'parinfer-toggle-mode)
