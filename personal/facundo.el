@@ -205,19 +205,22 @@ version 2016-06-18"
 (setq-default line-spacing 2)
 
 ;;; indent/unindent with tab
-;;; TODO add smarts to include half selected lines
 ;;; FIXME should not indent a region if not selected, just the current line
-;;; FIXME should fire completion if in the middle of line and no region selected
 ;;; https://ignaciopp.wordpress.com/2009/06/17/emacs-indentunindent-region-as-a-block-using-the-tab-key/
 
 (defvar my-indentation-offset 2 "My indentation offset. ")
 
+;;; TODO tge whole extend region to line beg/end deal should be factored out to its own function
 (defun my-indent ()
   "If mark is active indent code block, otherwise call company indet or complete."
   (interactive)
   (if mark-active
     (save-mark-and-excursion
-     (indent-code-rigidly (region-beginning) (region-end) my-indentation-offset)
+     (let ((beg (region-beginning)) (end (region-end)))
+       (save-excursion
+         (setq beg (progn (goto-char beg) (line-beginning-position))
+               end (progn (goto-char end) (line-end-position)))
+         (indent-code-rigidly beg end my-indentation-offset)))
      (setq deactivate-mark nil))
     (if (looking-at "\\_>")
       (company-complete-common-or-cycle)
@@ -226,7 +229,11 @@ version 2016-06-18"
 (defun my-unindent ()
   (interactive)
   (save-mark-and-excursion
-   (indent-code-rigidly (region-beginning) (region-end) (- my-indentation-offset))
+   (let ((beg (region-beginning)) (end (region-end)))
+     (save-excursion
+       (setq beg (progn (goto-char beg) (line-beginning-position))
+             end (progn (goto-char end) (line-end-position)))
+       (indent-code-rigidly beg end (- my-indentation-offset))))
    (setq deactivate-mark nil)))
 
 (define-key prog-mode-map (kbd "<tab>") 'my-indent)
