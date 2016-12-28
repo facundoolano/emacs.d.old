@@ -228,13 +228,15 @@ version 2016-06-18"
 
 (defun my-unindent ()
   (interactive)
-  (save-mark-and-excursion
-   (let ((beg (region-beginning)) (end (region-end)))
-     (save-excursion
-       (setq beg (progn (goto-char beg) (line-beginning-position))
-             end (progn (goto-char end) (line-end-position)))
-       (indent-code-rigidly beg end (- my-indentation-offset))))
-   (setq deactivate-mark nil)))
+  (if mark-active
+   (save-mark-and-excursion
+    (let ((beg (region-beginning)) (end (region-end)))
+      (save-excursion
+         (setq beg (progn (goto-char beg) (line-beginning-position))
+               end (progn (goto-char end) (line-end-position)))
+         (indent-code-rigidly beg end (- my-indentation-offset)))
+      (setq deactivate-mark nil)))
+   (indent-code-rigidly (line-beginning-position) (line-end-position) (- my-indentation-offset))))
 
 (define-key prog-mode-map (kbd "<tab>") 'my-indent)
 (define-key js2-mode-map (kbd "<tab>") 'my-indent)
