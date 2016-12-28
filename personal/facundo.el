@@ -136,6 +136,15 @@
 (define-key prelude-mode-map (kbd "M-o") 'crux-smart-open-line-above)
 (define-key prelude-mode-map (kbd "s-o") 'projectile-switch-project)
 
+(defun select-current-line ()
+  "Select the current line."
+  (interactive)
+  (end-of-line) ; move to end of line
+  (set-mark (line-beginning-position)))
+
+(global-set-key (kbd "s-a") 'select-current-line)
+(global-set-key (kbd "s-A") 'mark-whole-buffer)
+
 (setq projectile-globally-ignored-directories (append '("node_modules") projectile-globally-ignored-directories))
 
 ;;; open project in new frame
@@ -338,14 +347,21 @@ version 2016-06-18"
 (global-hl-todo-mode t)
 
 ;;; parinfer config
+(require 'parinfer)
+
+;; use regular yank to avoid weird region replacement
+(define-key parinfer-region-mode-map [remap yank] 'yank)
+
+;; enable smart-tab
+(setq parinfer-extensions '(defaults pretty-parens smart-tab))
+
 (defun disable-smartparens ()
+  "Try real hard to disable smartparens everywhere, and still won't work."
   (turn-off-smartparens-mode)
   (smartparens-global-mode -1)
   (smartparens-global-strict-mode -1)
   (smartparens-strict-mode -1)
   (smartparens-mode -1))
-
-(setq parinfer-extensions '(defaults pretty-parens smart-yank smart-tab))
 
 (add-hook 'prelude-prog-mode-hook 'disable-smartparens)
 (add-hook 'prelude-emacs-lisp-mode-hook 'disable-smartparens)
@@ -355,6 +371,3 @@ version 2016-06-18"
 (add-hook 'clojure-mode-hook #'parinfer-mode)
 (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
 (global-set-key (kbd "s-(") 'parinfer-toggle-mode)
-
-;; (setq magit-diff-auto-show nil)
-;; (add-hook 'git-commit-mode-hook (lambda () (save-selected-window (magit-process))))
