@@ -351,9 +351,11 @@ version 2016-06-18"
 
 ;; use regular yank to avoid weird region replacement
 (define-key parinfer-region-mode-map [remap yank] 'yank)
+(define-key parinfer-region-mode-map (kbd "<tab>") 'parinfer-shift-right)
+(define-key parinfer-region-mode-map (kbd "<backtab>") 'parinfer-shift-left)
 
-;; enable smart-tab
-(setq parinfer-extensions '(defaults pretty-parens smart-tab))
+;; redefine defaults to avoid unwanted extensions
+(setq parinfer-extensions '(defaults pretty-parens))
 
 (defun disable-smartparens ()
   "Try real hard to disable smartparens everywhere, and still won't work."
