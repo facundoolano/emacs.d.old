@@ -360,8 +360,8 @@ version 2016-06-18"
 (defun disable-smartparens ()
   "Try real hard to disable smartparens everywhere, and still won't work."
   (turn-off-smartparens-mode)
-  (smartparens-global-mode -1)
-  (smartparens-global-strict-mode -1)
+  ;; (smartparens-global-mode -1)
+  ;; (smartparens-global-strict-mode -1)
   (smartparens-strict-mode -1)
   (smartparens-mode -1))
 
@@ -373,3 +373,16 @@ version 2016-06-18"
 (add-hook 'clojure-mode-hook #'parinfer-mode)
 (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
 (global-set-key (kbd "s-(") 'parinfer-toggle-mode)
+
+;; a bunch of basic keybindings needed for emacs for mac
+(when (eq system-type 'darwin)
+  (setq mac-option-key-is-meta nil)
+  (setq mac-command-modifier 'super)
+  (setq mac-option-modifier 'meta)
+  (global-set-key (kbd "s-x") 'cua-cut-region)
+  (global-set-key (kbd "s-c") 'cua-copy-region)
+  (global-set-key (kbd "s-v") 'cua-paste)
+  (global-set-key (kbd "s-s") 'save-buffer)
+  (global-set-key (kbd "s-q") 'save-buffers-kill-emacs)
+  (global-set-key (kbd "s-z") 'undo-tree-undo)
+  (global-set-key (kbd "s-l") 'goto-line))
