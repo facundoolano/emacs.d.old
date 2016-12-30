@@ -3,8 +3,6 @@
 ;;; list of required packages
 (prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo js2-highlight-vars parinfer))
 
-(cua-mode)
-
 ;;; sublime like color theme
 (disable-theme 'zenburn)
 (load-theme 'monokai t)
@@ -139,7 +137,7 @@
     (beginning-of-buffer)
     (call-interactively 'replace-string)))
 
-(global-set-key (kbd "M-s-ƒ") 'my-replace-string)
+(global-set-key (kbd "M-s-f") 'my-replace-string)
 
 (define-key prelude-mode-map (kbd "C-o") 'crux-smart-open-line)
 (define-key prelude-mode-map (kbd "M-o") 'crux-smart-open-line-above)
@@ -337,7 +335,7 @@ version 2016-06-18"
 (global-set-key (kbd "s-N") 'new-empty-buffer-split)
 
 (defun kill-this-and-next ()
-  "Kill the current buffer and move to the next current project one if any, else find file in project. "
+  "Kill the current buffer and move to the next current project one if any, else find file in project."
   (interactive)
   (let ((next (car (-filter 'xah-user-buffer-q (projectile-project-buffers-non-visible))))
         (pname (projectile-project-name)))
@@ -359,8 +357,8 @@ version 2016-06-18"
 (global-set-key (kbd "s-k") 'kill-this-and-next)
 (global-set-key (kbd "s-K") 'kill-other-project-buffers)
 
-;;; wrap search by default
 (defadvice isearch-search (after isearch-no-fail activate)
+  "Advice search to be wrapped by default."
   (unless isearch-success
     (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
     (ad-activate 'isearch-search)
@@ -369,6 +367,7 @@ version 2016-06-18"
     (ad-activate 'isearch-search)))
 
 ;; highlights todo and fixme
+;; FIXME not working on js
 (global-hl-todo-mode t)
 
 ;;; parinfer config
