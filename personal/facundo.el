@@ -3,6 +3,8 @@
 ;;; list of required packages
 (prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo js2-highlight-vars parinfer))
 
+(cua-mode)
+
 ;;; sublime like color theme
 (disable-theme 'zenburn)
 (load-theme 'monokai t)
@@ -121,8 +123,15 @@
 (define-key prelude-mode-map (kbd "C-c p") 'projectile-command-map)
 (global-set-key (kbd "s-p") 'helm-projectile-find-file)
 (global-set-key (kbd "s-P") 'helm-M-x)
-(global-set-key (kbd "s-w") 'delete-frame)
 (global-set-key (kbd "s-F") 'helm-projectile-grep)
+
+(defun kill-project-frame ()
+  "Delete current frame and kill all project buffers."
+  (interactive)
+  (mapc 'kill-buffer (projectile-project-buffers))
+  (delete-frame))
+
+(global-set-key (kbd "s-w") 'kill-project-frame)
 
 (defun my-replace-string ()
   (interactive)
@@ -145,11 +154,27 @@
 (global-set-key (kbd "s-a") 'select-current-line)
 (global-set-key (kbd "s-A") 'mark-whole-buffer)
 
-(setq projectile-globally-ignored-directories (append '("node_modules") projectile-globally-ignored-directories))
+(setq projectile-globally-ignored-directories (append '("node_modules" "coverage") projectile-globally-ignored-directories))
 
 ;;; open project in new frame
 (nameframe-projectile-mode t)
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;;; copy pasted a modified version of the name frame function so it works in emacs for mac
+;;; FIXME ask why this is needed maybe open a PR or fork
+(defun nameframe-projectile--before-switch-project-hook ()
+  "Hook to create/switch to a project's frame."
+  (let* ((project-to-switch nameframe-projectile--project-to-switch)  ;; set by advise
+         (name (file-name-nondirectory (directory-file-name project-to-switch)))
+         (curr-frame (selected-frame))
+         (frame-alist (nameframe-frame-alist))
+         (frame (nameframe-get-frame name frame-alist)))
+    (cond
+     ;; project frame already exists
+     ((and frame (not (equal frame curr-frame)))
+      (select-frame-set-input-focus frame))
+     ((not frame)
+      (progn (nameframe-make-frame name) (select-frame-set-input-focus (nameframe-get-frame name)))))))
 
 ;;; navigate buffers
 (defun xah-next-user-buffer ()
@@ -386,3 +411,6 @@ version 2016-06-18"
   (global-set-key (kbd "s-q") 'save-buffers-kill-emacs)
   (global-set-key (kbd "s-z") 'undo-tree-undo)
   (global-set-key (kbd "s-l") 'goto-line))
+
+(require 'powerline)
+(powerline-default-theme)
