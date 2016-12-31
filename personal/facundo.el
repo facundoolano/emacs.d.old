@@ -1,7 +1,7 @@
 ;;; facundo customizations
 
 ;;; list of required packages
-(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo js2-highlight-vars parinfer))
+(prelude-require-packages '(drag-stuff monokai-theme nameframe-projectile neotree add-node-modules-path hl-todo js2-highlight-vars parinfer spaceline))
 
 ;;; sublime like color theme
 (disable-theme 'zenburn)
@@ -400,9 +400,12 @@ version 2016-06-18"
 
 ;; a bunch of basic keybindings needed for emacs for mac
 (when (eq system-type 'darwin)
+  (cua-mode)
   (setq mac-option-key-is-meta nil)
   (setq mac-command-modifier 'super)
   (setq mac-option-modifier 'meta)
+  (define-key cua--cua-keys-keymap (kbd "C-v") 'scroll-up-command)
+  (define-key cua--cua-keys-keymap (kbd "M-v") 'scroll-down-command)
   (global-set-key (kbd "s-x") 'cua-cut-region)
   (global-set-key (kbd "s-c") 'cua-copy-region)
   (global-set-key (kbd "s-v") 'cua-paste)
@@ -411,5 +414,8 @@ version 2016-06-18"
   (global-set-key (kbd "s-z") 'undo-tree-undo)
   (global-set-key (kbd "s-l") 'goto-line))
 
-(require 'powerline)
-(powerline-default-theme)
+;; (require 'powerline)
+;; (powerline-default-theme)
+
+(require 'spaceline-config)
+(spaceline-emacs-theme)
