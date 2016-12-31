@@ -6,7 +6,7 @@
 ;;; sublime like color theme
 (disable-theme 'zenburn)
 (load-theme 'monokai t)
-;; (load-theme 'solarized-dark t)
+(which-function-mode -1)
 
 ;;; project tree
 (require 'neotree)
@@ -414,8 +414,10 @@ version 2016-06-18"
   (global-set-key (kbd "s-z") 'undo-tree-undo)
   (global-set-key (kbd "s-l") 'goto-line))
 
-;; (require 'powerline)
-;; (powerline-default-theme)
-
 (require 'spaceline-config)
 (spaceline-emacs-theme)
+(setq powerline-default-separator 'slant)
+(spaceline-helm-mode)
+(spaceline-toggle-projectile-root-on)
+(spaceline-toggle-buffer-size-off)
+(spaceline-toggle-buffer-encoding-abbrev-off)
