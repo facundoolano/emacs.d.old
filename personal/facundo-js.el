@@ -1,4 +1,4 @@
-;;; facundo-node.el --- node programming customizations  -*- lexical-binding: t; -*-
+;;; facundo-js.el --- node programming customizations  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017  Facundo Olano
 
@@ -23,7 +23,7 @@
 ;;
 
 ;;; Code:
-
+(require 'js2-mode)
 (prelude-require-package 'add-node-modules-path)
 
 (eval-after-load 'js-mode
@@ -32,14 +32,12 @@
 (eval-after-load 'js2-mode
   '(add-hook 'js2-mode-hook #'add-node-modules-path))
 
-;;; FIXME this should go in js2 mode only
-(global-set-key (kbd "M-n i") 'npm-install)
-;; (global-set-key (kbd "M-n n") 'npm-new)
-(global-set-key (kbd "M-n d") 'npm-new-dependency)
-;; (global-set-key (kbd "M-n e") 'npm-nodemon-exec)
-(global-set-key (kbd "M-n p") 'npm-publish)
-(global-set-key (kbd "M-n t") 'npm-test)
-(global-set-key (kbd "M-n v") 'npm-version)
+(define-key js2-mode-map (kbd "M-n i") 'npm-install)
+(define-key js2-mode-map (kbd "M-n d") 'npm-new-dependency)
+(define-key js2-mode-map (kbd "M-n p") 'npm-publish)
+(define-key js2-mode-map (kbd "M-n t") 'npm-test)
+(define-key js2-mode-map (kbd "M-n v") 'npm-version)
+(define-key js2-mode-map (kbd "RET") 'js2-line-break) ; auto closes comment blocks on enter
 
-(provide 'facundo-node)
-;;; facundo-node.el ends here
+(provide 'facundo-js)
+;;; facundo-js.el ends here
