@@ -30,6 +30,9 @@
 (defvar my-indentation-offset 2 "My indentation offset.")
 (setq js2-basic-offset my-indentation-offset)
 
+;; make tab cycle wrap list
+(setq company-selection-wrap-around 1)
+
 ;;; TODO tge whole extend region to line beg/end deal should be factored out to its own function
 (defun my-indent ()
   "If mark is active indent code block, otherwise call company indet or complete."

@@ -148,6 +148,7 @@
 (define-key emacs-lisp-mode-map (kbd "s-e") 'eval-region)
 (global-set-key (kbd "C-M-f") 'forward-sexp)
 (global-set-key (kbd "C-M-b") 'backward-sexp)
+(global-set-key (kbd "s-V") 'cua-paste-pop)
 
 (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 
