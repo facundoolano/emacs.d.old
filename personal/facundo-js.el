@@ -32,12 +32,21 @@
 (eval-after-load 'js2-mode
   '(add-hook 'js2-mode-hook #'add-node-modules-path))
 
+(defun eslint-fix ()
+  "Format the current file with ESLint."
+  (interactive)
+  (if (executable-find "eslint")
+      (progn (call-process "eslint" nil "*ESLint Errors*" nil "--fix" buffer-file-name)
+             (revert-buffer t t t))
+    (message "ESLint not found.")))
+
 (define-key js2-mode-map (kbd "M-n i") 'npm-install)
 (define-key js2-mode-map (kbd "M-n d") 'npm-new-dependency)
 (define-key js2-mode-map (kbd "M-n p") 'npm-publish)
 (define-key js2-mode-map (kbd "M-n t") 'npm-test)
 (define-key js2-mode-map (kbd "M-n v") 'npm-version)
 (define-key js2-mode-map (kbd "RET") 'js2-line-break) ; auto closes comment blocks on enter
+(define-key js2-mode-map (kbd "s-f") 'eslint-fix)
 
 (provide 'facundo-js)
 ;;; facundo-js.el ends here

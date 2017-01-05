@@ -83,7 +83,8 @@
 
 (define-key prog-mode-map (kbd "<tab>") 'my-indent)
 (define-key js2-mode-map (kbd "<tab>") 'my-indent)
-(define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+;; not using this one anymore since its defined in the company-complete-cycle:
+;; (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
 (define-key prog-mode-map (kbd "<backtab>") 'my-unindent)
 (define-key js2-mode-map (kbd "<backtab>") 'my-unindent)
 (define-key js2-mode-map [(backspace)] 'backspace-whitespace-to-tab-stop)

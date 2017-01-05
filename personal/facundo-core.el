@@ -148,7 +148,9 @@
 (define-key emacs-lisp-mode-map (kbd "s-e") 'eval-region)
 (global-set-key (kbd "C-M-f") 'forward-sexp)
 (global-set-key (kbd "C-M-b") 'backward-sexp)
-(global-set-key (kbd "s-V") 'cua-paste-pop)
+(global-set-key (kbd "s-V") 'cua-paste-pop) ; paste cycling through kill ring
+(global-set-key (kbd "s-D") 'c-hungry-delete-forward) ; delete all following whitespaces
+(global-set-key [(super backspace)]  'c-hungry-delete-backwards) ; delete all preceeding whitespaces
 
 (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 
