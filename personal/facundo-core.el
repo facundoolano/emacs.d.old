@@ -22,7 +22,7 @@
 
 ;;; Code:
 
-(prelude-require-packages '(spaceline drag-stuff monokai-theme hl-todo js2-highlight-vars))
+(prelude-require-packages '(spaceline drag-stuff monokai-theme hl-todo js2-highlight-vars 'toggle-quotes))
 
 ;;; sublime like color theme
 (disable-theme 'zenburn)
@@ -150,7 +150,8 @@
 (global-set-key (kbd "C-M-b") 'backward-sexp)
 (global-set-key (kbd "s-V") 'cua-paste-pop) ; paste cycling through kill ring
 (global-set-key (kbd "s-D") 'c-hungry-delete-forward) ; delete all following whitespaces
-(global-set-key [(super backspace)]  'c-hungry-delete-backwards) ; delete all preceeding whitespaces
+(global-set-key [(super backspace)] 'c-hungry-delete-backwards) ; delete all preceeding whitespaces
+(global-set-key (kbd "C-'") 'toggle-quotes)
 
 (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 

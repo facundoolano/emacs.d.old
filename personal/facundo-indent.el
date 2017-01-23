@@ -83,7 +83,7 @@
 
 (define-key prog-mode-map (kbd "<tab>") 'my-indent)
 (define-key js2-mode-map (kbd "<tab>") 'my-indent)
-;; not using this one anymore since its defined in the company-complete-cycle:
+;; not using this one anymore since its defined in the company-simple-complete:
 ;; (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
 (define-key prog-mode-map (kbd "<backtab>") 'my-unindent)
 (define-key js2-mode-map (kbd "<backtab>") 'my-unindent)
