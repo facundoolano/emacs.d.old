@@ -22,7 +22,7 @@
 
 ;;; Code:
 
-(prelude-require-packages '(spaceline drag-stuff monokai-theme hl-todo js2-highlight-vars 'toggle-quotes))
+(prelude-require-packages '(spaceline drag-stuff monokai-theme hl-todo js2-highlight-vars toggle-quotes))
 
 ;;; sublime like color theme
 (disable-theme 'zenburn)
