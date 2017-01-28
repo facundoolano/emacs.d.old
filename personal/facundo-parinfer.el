@@ -32,7 +32,13 @@
 (define-key parinfer-region-mode-map (kbd "<tab>") 'parinfer-shift-right)
 (define-key parinfer-region-mode-map (kbd "<backtab>") 'parinfer-shift-left)
 
-;; redefine defaults to avoid unwanted extensions
+;; enable some paredit commands
+(define-key parinfer-mode-map (kbd "C-)") 'sp-forward-slurp-sexp)
+(define-key parinfer-mode-map (kbd "C-(") 'sp-backward-slurp-sexp)
+(define-key parinfer-mode-map (kbd "C-{") 'sp-forward-barf-sexp)
+(define-key parinfer-mode-map (kbd "C-}") 'sp-backward-barf-sexp)
+
+;; Redefine defaults to avoid unwanted extensions
 (setq parinfer-extensions '(defaults pretty-parens))
 
 (defun disable-smartparens ()
@@ -50,6 +56,8 @@
 (add-hook 'js2-mode-hook #'smartparens-mode)
 (add-hook 'clojure-mode-hook #'parinfer-mode)
 (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+(add-hook 'clojure-mode-hook #'electric-pair-mode)
+(add-hook 'emacs-lisp-mode-hook #'electric-pair-mode)
 (global-set-key (kbd "s-(") 'parinfer-toggle-mode)
 
 (provide 'facundo-parinfer)

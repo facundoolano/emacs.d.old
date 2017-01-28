@@ -32,6 +32,12 @@
 (eval-after-load 'js2-mode
   '(add-hook 'js2-mode-hook #'add-node-modules-path))
 
+;; to avoid ugly output in npm commands
+(add-to-list
+ 'comint-preoutput-filter-functions
+ (lambda (output)
+   (replace-regexp-in-string "\\[[0-9]+[GK]" "" output)))
+
 (defun eslint-fix ()
   "Format the current file with ESLint."
   (interactive)
