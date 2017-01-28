@@ -24,7 +24,7 @@
 
 ;;; Code:
 (require 'js2-mode)
-(prelude-require-package 'add-node-modules-path)
+(prelude-require-package 'add-node-modules-path 'mocha)
 
 (eval-after-load 'js-mode
   '(add-hook 'js-mode-hook #'add-node-modules-path))
@@ -49,7 +49,9 @@
 (define-key js2-mode-map (kbd "M-n i") 'npm-install)
 (define-key js2-mode-map (kbd "M-n d") 'npm-new-dependency)
 (define-key js2-mode-map (kbd "M-n p") 'npm-publish)
-(define-key js2-mode-map (kbd "M-n t") 'npm-test)
+(define-key js2-mode-map (kbd "M-n M-t") 'mocha-test-project)
+(define-key js2-mode-map (kbd "M-n t") 'mocha-test-file)
+(define-key js2-mode-map (kbd "M-n T") 'mocha-test-at-point)
 (define-key js2-mode-map (kbd "M-n v") 'npm-version)
 (define-key js2-mode-map (kbd "RET") 'js2-line-break) ; auto closes comment blocks on enter
 (define-key js2-mode-map (kbd "s-f") 'eslint-fix)
