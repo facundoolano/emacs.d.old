@@ -24,7 +24,7 @@
 
 ;;; Code:
 (require 'js2-mode)
-(prelude-require-package 'add-node-modules-path 'mocha)
+(prelude-require-packages '(add-node-modules-path mocha))
 
 (eval-after-load 'js-mode
   '(add-hook 'js-mode-hook #'add-node-modules-path))
