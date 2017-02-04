@@ -75,8 +75,8 @@
 
 (setq neo-confirm-change-root "Off")
 ;; sync neotree when finding file with projectile
-(add-hook 'projectile-find-file-hook 'neotree-project-sync)
-(add-hook 'projectile-grep-finished-hook 'neotree-project-sync)
+;(add-hook 'projectile-find-file-hook 'neotree-project-sync)
+;(add-hook 'projectile-grep-finished-hook 'neotree-project-sync)
 
 (global-set-key [f8] 'neotree-project-toggle)
 ;; (neotree-project-toggle)

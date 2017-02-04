@@ -47,8 +47,7 @@
         (if (or (not (user-buffer-q)) (not (projectile-project-buffer-p (current-buffer) root)))
             (progn (next-buffer)
                    (setq i (1+ i)))
-          (progn (setq i 100))))
-      (neotree-project-sync))))
+          (progn (setq i 100)))))))
 
 (defun previous-project-buffer ()
   "Switch to the previous user buffer within the current project."
@@ -60,8 +59,7 @@
         (if (or (not (user-buffer-q)) (not (projectile-project-buffer-p (current-buffer) root)))
             (progn (previous-buffer)
                    (setq i (1+ i)))
-          (progn (setq i 100))))
-      (neotree-project-sync))))
+          (progn (setq i 100)))))))
 
 (defun user-buffer-q (&optional buffer)
   "Return t if BUFFER is a user buffer, else nil.  BUFFER defaults to the current bufer."
@@ -116,7 +114,7 @@
 (define-key prelude-mode-map (kbd "C-c p") 'projectile-command-map)
 
 (global-set-key (kbd "s-p") 'helm-projectile-find-file)
-(global-set-key (kbd "s-P") 'helm-M-x)
+(global-set-key (kbd "s-P") 'projectile-find-file-other-window)
 (global-set-key (kbd "s-F") 'helm-projectile-grep)
 (global-set-key (kbd "s-w") 'kill-project-frame)
 (define-key prelude-mode-map (kbd "s-o") 'projectile-switch-project)
