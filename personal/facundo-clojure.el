@@ -35,7 +35,25 @@
   (cider-load-buffer-and-switch-to-repl-buffer)
   (cider-repl-return))
 
+(defun clojure-run-ns-tests ()
+  "Refresh cider and run test for the current namespace."
+  (interactive)
+  (cider-refresh 'clear)
+  (cider-test-run-ns-tests nil))
+
+(defun clojure-run-project-tests ()
+  "Refresh cider and run test for the entire project."
+  (interactive)
+  (cider-refresh 'clear)
+  (cider-test-run-project-tests))
+
+(define-key cider-repl-mode-map (kbd "<up>") 'cider-repl-previous-input)
+(define-key cider-repl-mode-map (kbd "<down>") 'cider-repl-next-input)
 (define-key clojure-mode-map (kbd "s-e") 'reload-and-eval-in-repl)
+
+;; this bindings dont make much sense but are the same that for node tests
+(define-key clojure-mode-map (kbd "M-n t") 'clojure-run-ns-tests)
+(define-key clojure-mode-map (kbd "M-n M-t") 'clojure-run-project-tests)
 
 (provide 'facundo-clojure)
 ;;; facundo-clojure.el ends here
