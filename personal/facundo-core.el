@@ -131,12 +131,19 @@
 (setq mouse-wheel-scroll-amount '(0.05))
 (setq mouse-wheel-progressive-speed nil)
 
+(defun go-back ()
+  (interactive)
+  (universal-argument)
+  (cua-set-mark
+   `(4)))
+
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
 (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
 (global-set-key (kbd "s-Z") 'undo-tree-redo)
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region-or-line)
+(global-set-key (kbd "s-b") 'go-back)
 (global-set-key (kbd "s-d") 'delete-line-or-region)
 (global-set-key (kbd "M-s-f") 'my-replace-string)
 (define-key prelude-mode-map (kbd "C-o") 'crux-smart-open-line)

@@ -26,6 +26,9 @@
 (require 'js2-mode)
 (prelude-require-packages '(add-node-modules-path mocha))
 
+(setq mocha-reporter "spec")
+(setq mocha-options "--no-colors --recursive")
+
 (eval-after-load 'js-mode
   '(add-hook 'js-mode-hook #'add-node-modules-path))
 
@@ -55,6 +58,7 @@
 (define-key js2-mode-map (kbd "M-n v") 'npm-version)
 (define-key js2-mode-map (kbd "RET") 'js2-line-break) ; auto closes comment blocks on enter
 (define-key js2-mode-map (kbd "s-f") 'eslint-fix)
+(define-key js2-mode-map (kbd "M-h") 'js2-highlight-vars-mode)
 
 (provide 'facundo-js)
 ;;; facundo-js.el ends here

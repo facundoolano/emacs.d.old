@@ -24,7 +24,14 @@
 
 ;;; Code:
 (require 'cider)
+(require 'flycheck-joker)
+
 (setq cider-repl-scroll-on-output nil)
+(setq cider-prompt-for-symbol nil)
+
+; not so sure about this...
+;; (add-to-list 'prelude-indent-sensitive-modes 'clojure-mode)
+;; (add-to-list 'crux-indent-sensitive-modes 'clojure-mode)
 
 (defun reload-and-eval-in-repl ()
   "Set the ns of the repl to the one in the current buffer, then eval the region of the whole buffer in the repl and switch to it."

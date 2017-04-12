@@ -45,8 +45,9 @@
 
   See URL `https://github.com/candid82/joker'."
   :command ("joker" "--lint" source)
-  :error-patterns ((error line-start (file-name) ":" line ":" column ": " (0+ not-newline) (or "error: " "Exception: ") (message) line-end)
-                   (warning line-start (file-name) ":" line ":" column ": " (0+ not-newline) "warning: " (message) line-end))
+  :error-patterns
+  ((error line-start (file-name) ":" line ":" column ": " (0+ not-newline) (or "error: " "Exception: ") (message) line-end)
+   (warning line-start (file-name) ":" line ":" column ": " (0+ not-newline) "warning: " (message) line-end))
   :modes (clojure-mode clojurec-mode))
 
 (flycheck-define-checker clojurescript-joker
@@ -54,8 +55,9 @@
 
   See URL `https://github.com/candid82/joker'."
   :command ("joker" "--lintcljs" source)
-  :error-patterns ((error line-start (file-name) ":" line ":" column ": " (0+ not-newline) (or "error: " "Exception: ") (message) line-end)
-                   (warning line-start (file-name) ":" line ":" column ": " (0+ not-newline) "warning: " (message) line-end))
+  :error-patterns
+  ((error line-start (file-name) ":" line ":" column ": " (0+ not-newline) (or "error: " "Exception: ") (message) line-end)
+   (warning line-start (file-name) ":" line ":" column ": " (0+ not-newline) "warning: " (message) line-end))
   :modes (clojurescript-mode))
 
 (add-to-list 'flycheck-checkers 'clojure-joker)
