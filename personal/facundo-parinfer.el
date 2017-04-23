@@ -43,6 +43,7 @@
 
 ;; Redefine defaults to avoid unwanted extensions
 (setq parinfer-extensions '(defaults pretty-parens))
+(add-hook 'parinfer-mode-enable-hook #'parinfer--switch-to-paren-mode)
 
 (defun disable-smartparens ()
   "Try real hard to disable smartparens everywhere, and still won't work."
@@ -58,9 +59,12 @@
 (add-hook 'prelude-lisp-coding-hook 'disable-smartparens)
 (add-hook 'js2-mode-hook #'smartparens-mode)
 (add-hook 'clojure-mode-hook #'parinfer-mode)
-(add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
 (add-hook 'clojure-mode-hook #'electric-pair-mode)
+(add-hook 'cider-repl-mode-hook #'parinfer-mode)
+(add-hook 'cider-repl-mode-hook #'electric-pair-mode)
+(add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
 (add-hook 'emacs-lisp-mode-hook #'electric-pair-mode)
+
 (global-set-key (kbd "s-(") 'parinfer-toggle-mode)
 
 (provide 'facundo-parinfer)

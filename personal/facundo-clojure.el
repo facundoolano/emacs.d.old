@@ -28,6 +28,7 @@
 
 (setq cider-repl-scroll-on-output nil)
 (setq cider-prompt-for-symbol nil)
+(setq clojure-align-forms-automatically t)
 
 ; not so sure about this...
 ;; (add-to-list 'prelude-indent-sensitive-modes 'clojure-mode)
@@ -54,9 +55,23 @@
   (cider-refresh 'clear)
   (cider-test-run-project-tests))
 
+(defun cider-repl-newline-or-return ()
+  "Repl return when in the end of the expression, otherwise insert newline"
+  (interactive)
+  (if (char-after)
+      (newline-and-indent)
+    (cider-repl-return)))
+
 (define-key cider-repl-mode-map (kbd "<up>") 'cider-repl-previous-input)
 (define-key cider-repl-mode-map (kbd "<down>") 'cider-repl-next-input)
+;; In case I don't like the prefer newline behavior
+;; (define-key prelude-mode-map (kbd "<S-return>") nil)
+;; (define-key cider-repl-mode-map (kbd "<S-return>") 'newline)
+(define-key cider-repl-mode-map (kbd "<return>") 'cider-repl-newline-or-return)
+(define-key cider-repl-mode-map (kbd "<S-return>") 'cider-repl-return)
 (define-key clojure-mode-map (kbd "s-e") 'reload-and-eval-in-repl)
+(define-key prelude-mode-map (kbd "s-j") nil)
+(define-key clojure-mode-map (kbd "s-j") 'cider-jack-in)
 
 ;; this bindings dont make much sense but are the same that for node tests
 (define-key clojure-mode-map (kbd "M-n t") 'clojure-run-ns-tests)
