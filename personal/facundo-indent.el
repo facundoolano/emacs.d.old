@@ -25,6 +25,7 @@
 ;;; Code:
 
 (require 'company)
+(require 'company-dabbrev)
 (require 'js2-mode)
 
 (defvar my-indentation-offset 2 "My indentation offset.")
@@ -32,21 +33,22 @@
 
 ;; make tab cycle wrap list
 (setq company-selection-wrap-around 1)
+(setq company-dabbrev-downcase nil)
 
 ;;; TODO tge whole extend region to line beg/end deal should be factored out to its own function
 (defun my-indent ()
   "If mark is active indent code block, otherwise call company indet or complete."
   (interactive)
   (if mark-active
-    (save-mark-and-excursion
-     (let ((beg (region-beginning)) (end (region-end)))
-       (save-excursion
-         (setq beg (progn (goto-char beg) (line-beginning-position))
-               end (progn (goto-char end) (line-end-position)))
-         (indent-code-rigidly beg end my-indentation-offset)))
-     (setq deactivate-mark nil))
+      (save-mark-and-excursion
+       (let ((beg (region-beginning)) (end (region-end)))
+         (save-excursion
+           (setq beg (progn (goto-char beg) (line-beginning-position))
+                 end (progn (goto-char end) (line-end-position)))
+           (indent-code-rigidly beg end my-indentation-offset)))
+       (setq deactivate-mark nil))
     (if (looking-at "\\_>")
-      (company-complete-common-or-cycle)
+        (company-complete-common-or-cycle)
       (indent-according-to-mode))))
 
 (defun my-unindent ()
@@ -85,6 +87,7 @@
 (define-key js2-mode-map (kbd "<tab>") 'my-indent)
 ;; not using this one anymore since its defined in the company-simple-complete:
 ;; (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+(define-key company-active-map (kbd "<return>") 'company-select-next)
 (define-key prog-mode-map (kbd "<backtab>") 'my-unindent)
 (define-key js2-mode-map (kbd "<backtab>") 'my-unindent)
 (define-key js2-mode-map [(backspace)] 'backspace-whitespace-to-tab-stop)
