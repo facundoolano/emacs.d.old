@@ -29,6 +29,7 @@
 (require 'helm)
 
 (setq projectile-globally-ignored-directories (append '("node_modules" "coverage") projectile-globally-ignored-directories))
+(setq shell-file-name "/bin/sh")
 
 (defun kill-project-frame ()
   "Delete current frame and kill all project buffers."
