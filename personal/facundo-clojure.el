@@ -27,13 +27,15 @@
 (require 'flycheck-joker)
 
 (setq cider-repl-scroll-on-output nil)
+(setq cider-repl-wrap-history t)
+(setq cider-repl-history-file ".cider-repl-history")
 (setq cider-prompt-for-symbol nil)
 (setq clojure-align-forms-automatically t)
-
-; not so sure about this...
+;; not so sure about this...
 ;; (add-to-list 'prelude-indent-sensitive-modes 'clojure-mode)
 ;; (add-to-list 'crux-indent-sensitive-modes 'clojure-mode)
 
+;; TODO rethink this, doesn't seem that useful anymore
 (defun reload-and-eval-in-repl ()
   "Set the ns of the repl to the one in the current buffer, then eval the region of the whole buffer in the repl and switch to it."
   (interactive)
@@ -55,23 +57,25 @@
   (cider-refresh 'clear)
   (cider-test-run-project-tests))
 
-(defun cider-repl-newline-or-return ()
-  "Repl return when in the end of the expression, otherwise insert newline"
+(defun cider-repl-repeat-command ()
+  "Repeat the last command run in the repl. Useful to reload and run tests."
   (interactive)
-  (if (char-after)
-      (newline-and-indent)
-    (cider-repl-return)))
+  (cider-switch-to-repl-buffer)
+  (cider-repl-previous-input)
+  (cider-repl-return)
+  (cider-switch-to-last-clojure-buffer))
 
 (define-key cider-repl-mode-map (kbd "<up>") 'cider-repl-previous-input)
 (define-key cider-repl-mode-map (kbd "<down>") 'cider-repl-next-input)
-;; In case I don't like the prefer newline behavior
 (define-key prelude-mode-map (kbd "<S-return>") nil)
 (define-key cider-repl-mode-map (kbd "<S-return>") 'newline)
-;; (define-key cider-repl-mode-map (kbd "<return>") 'cider-repl-newline-or-return)
-;; (define-key cider-repl-mode-map (kbd "<S-return>") 'cider-repl-return)
+(define-key cider-repl-mode-map (kbd "<S-k>") 'kill-this-buffer)
 (define-key clojure-mode-map (kbd "s-e") 'reload-and-eval-in-repl)
 (define-key prelude-mode-map (kbd "s-j") nil)
 (define-key clojure-mode-map (kbd "s-j") 'cider-jack-in)
+(define-key prelude-mode-map (kbd "s-r") nil)
+(define-key clojure-mode-map (kbd "s-r") 'cider-repl-repeat-command)
+
 
 ;; this bindings dont make much sense but are the same that for node tests
 (define-key clojure-mode-map (kbd "M-n t") 'clojure-run-ns-tests)
