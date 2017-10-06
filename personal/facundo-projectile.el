@@ -116,7 +116,7 @@
 
 (global-set-key (kbd "s-p") 'helm-projectile-find-file)
 (global-set-key (kbd "s-P") 'projectile-find-file-other-window)
-(global-set-key (kbd "s-F") 'helm-projectile-grep)
+(global-set-key (kbd "s-F") 'helm-projectile-ag)
 (global-set-key (kbd "s-w") 'kill-project-frame)
 (define-key prelude-mode-map (kbd "s-o") 'projectile-switch-project)
 

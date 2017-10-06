@@ -29,10 +29,11 @@
 (require 'prelude-erlang)
 
 (require 'erlang-start)
-(setq erlang-root-dir "~/dev/erl/19.3/")
-(setq exec-path (cons "~/dev/erl/19.3/bin" exec-path))
-(setq erlang-man-root-dir "~/dev/erl/19.3/man")
-(setq load-path (cons "~/dev/erl/19.3/lib/tools-2.9.1/emacs" load-path))
+(setq erlang-root-dir "/usr/local/lib/erlang")
+(setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
+(setq erlang-man-root-dir "/usr/local/lib/erlang/man")
+(setq load-path (cons "/usr/local/lib/erlang/lib/tools-2.9.1/emacs" load-path))
+(setq erlang-indent-level 2)
 
 (defun erlang-shell-return ()
   "insert a trailing dot if missing, then return"
