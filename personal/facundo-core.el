@@ -22,9 +22,12 @@
 
 ;;; Code:
 
-(prelude-require-packages '(spaceline drag-stuff monokai-theme hl-todo js2-highlight-vars toggle-quotes))
+(prelude-require-packages '(spaceline drag-stuff monokai-theme hl-todo
+                                      js2-highlight-vars toggle-quotes
+                                      elixir-mode centered-window-mode
+                                      cql-mode))
 
-;;; sublime like color theme
+;;; Sublime like color theme
 (disable-theme 'zenburn)
 (load-theme 'monokai t)
 (which-function-mode -1)
@@ -60,6 +63,18 @@
 
 ;;; disable line wrapping
 (set-default 'truncate-lines t)
+
+;; TODO move these few to a "facundo-text.el"
+;; wrap lines in text modes
+(add-hook 'text-mode-hook 'auto-fill-mode)
+(add-hook 'org-mode-hook 'auto-fill-mode)
+(add-hook 'markdown-mode-hook 'auto-fill-mode)
+
+(add-hook 'text-mode-hook 'visual-line-mode)
+(add-hook 'org-mode-hook 'visual-line-mode)
+(add-hook 'markdown-mode-hook 'visual-line-mode)
+
+(setq org-startup-folded nil)
 
 ;; highlights todo and fixme
 (require 'hl-todo)
@@ -161,9 +176,11 @@
 (global-set-key (kbd "s-D") 'c-hungry-delete-forward) ; delete all following whitespaces
 (global-set-key [(super backspace)] 'c-hungry-delete-backwards) ; delete all preceeding whitespaces
 (global-set-key (kbd "C-'") 'toggle-quotes)
+(global-set-key (kbd "<f9>") 'centered-window-mode)
 
 (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 (setq comint-scroll-show-maximum-output nil)
 
 (provide 'facundo-core)
 ;;; facundo-core.el ends here
+{
