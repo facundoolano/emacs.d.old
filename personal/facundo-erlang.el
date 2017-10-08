@@ -34,6 +34,9 @@
 (setq erlang-man-root-dir "/usr/local/lib/erlang/man")
 (setq load-path (cons "/usr/local/lib/erlang/lib/tools-2.9.1/emacs" load-path))
 (setq erlang-indent-level 2)
+(setq flycheck-erlang-include-path (list "../include/" "../../include/"))
+
+(sp-local-pair 'erlang-mode "<<\"" "\">>")
 
 (defun erlang-shell-return ()
   "insert a trailing dot if missing, then return"
