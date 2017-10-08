@@ -39,6 +39,7 @@
 (spaceline-toggle-projectile-root-on)
 (spaceline-toggle-buffer-size-off)
 (spaceline-toggle-buffer-encoding-abbrev-off)
+(spaceline-toggle-minor-modes-off)
 
 ;;; show line numbers, but not on neotree
 (setq linum-format 'dynamic)
@@ -176,6 +177,7 @@
 (global-set-key (kbd "s-D") 'c-hungry-delete-forward) ; delete all following whitespaces
 (global-set-key [(super backspace)] 'c-hungry-delete-backwards) ; delete all preceeding whitespaces
 (global-set-key (kbd "C-'") 'toggle-quotes)
+
 (global-set-key (kbd "<f9>") 'centered-window-mode)
 
 (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
@@ -183,4 +185,3 @@
 
 (provide 'facundo-core)
 ;;; facundo-core.el ends here
-{
