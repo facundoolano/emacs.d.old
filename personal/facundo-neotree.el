@@ -40,7 +40,7 @@
       neo-auto-indent-point t
       neo-vc-integration nil)
 
-(setq neo-toggle-window-keep-p t)
+(setq neo-toggle-window-keep-p nil)
 
 ;; TODO reduce duplication
 (defun neotree-project-sync ()
@@ -62,16 +62,14 @@
   "Open NeoTree using the git root."
   (interactive)
   (let ((project-dir (projectile-project-root))
-        (file-name (buffer-file-name))
-        (cw (selected-window)))
+        (file-name (buffer-file-name)))
     (neotree-toggle)
     (if project-dir
         (if (neo-global--window-exists-p)
             (progn
               (neotree-dir project-dir)
               (neotree-find file-name)))
-      (message "Could not find git project root."))
-    (select-window cw)))
+      (message "Could not find git project root."))))
 
 (setq neo-confirm-change-root "Off")
 ;; sync neotree when finding file with projectile
@@ -79,8 +77,6 @@
 ;(add-hook 'projectile-grep-finished-hook 'neotree-project-sync)
 
 (global-set-key [f8] 'neotree-project-toggle)
-;; (neotree-project-toggle)
-(add-hook 'after-init-hook #'neotree-project-sync) ;;; is this working?
 
 (defun my/neotree-hook (_unused)
   "Disable line line numbers in neotree."

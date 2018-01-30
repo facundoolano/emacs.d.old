@@ -29,12 +29,18 @@
 
 ;;; Sublime like color theme
 (disable-theme 'zenburn)
+;; (load-theme 'sanityinc-tomorrow-day)
 (load-theme 'monokai t)
+(setq-default line-spacing 5)
+
 (which-function-mode -1)
+
+(setq powerline-default-separator 'utf-8)
+(setq powerline-utf-8-separator-left        32
+      powerline-utf-8-separator-right       32)
 
 (require 'spaceline-config)
 (spaceline-emacs-theme)
-(setq powerline-default-separator 'slant)
 (spaceline-helm-mode)
 (spaceline-toggle-projectile-root-on)
 (spaceline-toggle-buffer-size-off)
@@ -42,11 +48,11 @@
 (spaceline-toggle-minor-modes-off)
 
 ;;; show line numbers, but not on neotree
-(setq linum-format 'dynamic)
+;; (setq linum-format 'dynamic)
+(setq linum-format "%3d ")
 (add-hook 'prog-mode-hook 'linum-mode)
 
 (fringe-mode '(10 . 0))
-(setq-default line-spacing 2)
 
 ;;; move selection with M
 (drag-stuff-global-mode 1)
@@ -76,6 +82,8 @@
 (add-hook 'markdown-mode-hook 'visual-line-mode)
 
 (setq org-startup-folded nil)
+
+(setq magit-no-confirm-default '(magit-branch-and-checkout))
 
 ;; highlights todo and fixme
 (require 'hl-todo)
@@ -152,6 +160,22 @@
   (universal-argument)
   (cua-set-mark
    `(4)))
+
+(defun my/zoom-in ()
+  "Increase font size by 10 points"
+  (interactive)
+  (set-face-attribute 'default nil
+                      :height
+                      (+ (face-attribute 'default :height)
+                         10)))
+
+(defun my/zoom-out ()
+  "Decrease font size by 10 points"
+  (interactive)
+  (set-face-attribute 'default nil
+                      :height
+                      (- (face-attribute 'default :height)
+                         10)))
 
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
