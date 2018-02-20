@@ -29,6 +29,10 @@
 (require 'prelude-erlang)
 
 (require 'erlang-start)
+
+;; default to erlang mode in .config files
+(add-to-list 'auto-mode-alist '("\\.config\\’" . erlang-mode))
+
 (setq erlang-root-dir "/usr/local/lib/erlang")
 (setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
 (setq erlang-man-root-dir "/usr/local/lib/erlang/man")
