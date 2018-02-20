@@ -25,7 +25,7 @@
 (prelude-require-packages '(spaceline drag-stuff monokai-theme hl-todo
                                       js2-highlight-vars toggle-quotes
                                       elixir-mode centered-window-mode
-                                      cql-mode))
+                                      cql-mode flycheck-pycheckers))
 
 ;;; Sublime like color theme
 (disable-theme 'zenburn)
