@@ -177,6 +177,21 @@
                       (- (face-attribute 'default :height)
                          10)))
 
+(defun mark-and-search ()
+  "Easy mark symbol current symbol and search for it in the current buffer "
+  (interactive)
+  (easy-mark 1)
+  (cua-copy-region nil)
+  (isearch-forward nil 1)
+  (isearch-yank-kill))
+
+(defun mark-and-grep ()
+  "Easy mark symbol current symbol and search for it in the project files. "
+  (interactive)
+  (easy-mark 1)
+  (cua-copy-region nil)
+  (helm-projectile-ag))
+
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
 (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
@@ -201,11 +216,13 @@
 (global-set-key (kbd "s-D") 'c-hungry-delete-forward) ; delete all following whitespaces
 (global-set-key [(super backspace)] 'c-hungry-delete-backwards) ; delete all preceeding whitespaces
 (global-set-key (kbd "C-'") 'toggle-quotes)
+(global-set-key (kbd "C-S-s") 'mark-and-search)
+(global-set-key (kbd "C-M-s") 'mark-and-grep)
 
 (global-set-key (kbd "<f9>") 'centered-window-mode)
 
 (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 (setq comint-scroll-show-maximum-output nil)
-
+y
 (provide 'facundo-core)
 ;;; facundo-core.el ends here
