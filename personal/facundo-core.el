@@ -224,6 +224,6 @@
 
 (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 (setq comint-scroll-show-maximum-output nil)
-y
+
 (provide 'facundo-core)
 ;;; facundo-core.el ends here
