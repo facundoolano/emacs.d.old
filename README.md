@@ -1,5 +1,5 @@
-[![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
-[![Gratipay Team](https://img.shields.io/gratipay/team/prelude.svg?maxAge=2592000)](https://gratipay.com/prelude/)
+This is my old emacs configuration, based on prelude. The new one is [here](https://github.com/facundoolano/emacs.d).
+
 
 Emacs Prelude
 =============
